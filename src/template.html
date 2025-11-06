@@ -1,0 +1,219 @@
+<style>
+  :host {
+    all: initial;
+  }
+
+  .vc-wrap {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 2147483000;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+  }
+
+  .vc-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .15), 0 2px 6px rgba(0, 0, 0, .1);
+    background: var(--vc-brand, #6E56CF);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+
+  .vc-fab:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, .18), 0 3px 7px rgba(0, 0, 0, .12);
+  }
+
+  .vc-fab:active {
+    transform: translateY(0);
+  }
+
+  .vc-window {
+    width: min(360px, calc(100vw - 40px));
+    height: 520px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #111827;
+    color: #e5e7eb;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+
+  .vc-header {
+    background: linear-gradient(180deg, var(--vc-brand, #6E56CF), var(--vc-brand-dark, #5f49b3));
+    color: #fff;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .vc-header-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .vc-logo {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: none;
+    background: rgba(255, 255, 255, .25);
+  }
+
+  .vc-title {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vc-close {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .vc-close:hover {
+    background: rgba(255, 255, 255, .15);
+  }
+
+  .vc-messages {
+    flex: 1;
+    overflow: auto;
+    padding: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .vc-msg {
+    max-width: 80%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin: 6px 0;
+    line-height: 1.35;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .vc-user {
+    background: #374151;
+    margin-left: auto;
+    border-top-right-radius: 4px;
+  }
+
+  .vc-bot {
+    background: #1f2937;
+    margin-right: auto;
+    border-top-left-radius: 4px;
+  }
+
+  .vc-input {
+    border-top: 1px solid #1f2937;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: end;
+    background: #0b1220;
+  }
+
+  .vc-textarea {
+    resize: none;
+    min-height: 20px;
+    max-height: 120px;
+    width: 90%;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #e5e7eb;
+    background: #0f172a;
+    border: 1px solid #1f2937;
+    border-radius: 10px;
+    padding: 10px 12px;
+    outline: none;
+  }
+
+  .vc-textarea:focus {
+    border-color: var(--vc-brand, #6E56CF);
+    box-shadow: 0 0 0 3px rgba(110, 86, 207, .25);
+  }
+
+  .vc-send {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    background: var(--vc-brand, #6E56CF);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+
+  .vc-send svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .vc-send[disabled] {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+
+  .vc-send:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(110, 86, 207, .35);
+  }
+
+  .vc-hide {
+    display: none;
+  }
+</style>
+
+<div class="vc-wrap" part="wrapper">
+  <div class="vc-window vc-hide" part="window" aria-label="Chat">
+    <div class="vc-header">
+      <div class="vc-header-left">
+        <img class="vc-logo" alt="Logo del chat" />
+        <div class="vc-title" data-ref="title">Chat</div>
+      </div>
+      <button class="vc-close" aria-label="Cerrar" title="Cerrar">✕</button>
+    </div>
+    <div class="vc-messages" part="messages"></div>
+    <div class="vc-input">
+      <textarea class="vc-textarea" rows="1" placeholder="Escribe tu mensaje..."
+        aria-label="Escribir mensaje"></textarea>
+      <button class="vc-send" aria-label="Enviar">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <button class="vc-fab" part="fab" aria-label="Abrir chat" title="Abrir chat">💬</button>
+</div>

@@ -1,0 +1,18 @@
+{
+  "name": "vinum-chat-widget",
+  "version": "1.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:bundle": "node esbuild.config.mjs",
+    "build:obfuscate": "javascript-obfuscator dist/vinum-chat-widget.min.js --output dist/vinum-chat-widget.obf.js --compact true --control-flow-flattening true --dead-code-injection true --dead-code-injection-threshold 0.1 --string-array true --string-array-encoding base64 --string-array-threshold 0.75 --disable-console-output true",
+    "build": "npm run clean && npm run build:bundle && npm run build:obfuscate"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "javascript-obfuscator": "^4.1.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.6.3"
+  }
+}
